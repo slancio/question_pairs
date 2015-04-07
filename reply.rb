@@ -1,6 +1,9 @@
 require_relative 'questions_database'
+require_relative 'save'
 
 class Reply
+  include Save
+
   def self.find_by_id(id)
     results = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
@@ -47,27 +50,6 @@ class Reply
     @body = options['body']
     @question_id, @user_id = options['question_id'], options['user_id']
     @parent_id = options['parent_id']
-  end
-
-  def save
-    if id.nil?
-      QuestionsDatabase.instance.execute(<<-SQL, body, question_id, parent_id, user_id)
-        INSERT INTO
-          replies (body, question_id, parent_id, user_id)
-        VALUES
-          (?, ?, ?, ?)
-      SQL
-      @id = QuestionsDatabase.instance.last_insert_row_id
-    else
-      QuestionsDatabase.instance.execute(<<-SQL, body, question_id, parent_id, user_id, id)
-      UPDATE replies
-      SET body = ?,
-          question_id = ?,
-          parent_id = ?,
-          user_id = ?
-      WHERE id = ?
-      SQL
-    end
   end
 
   def author

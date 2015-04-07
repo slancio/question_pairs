@@ -1,6 +1,9 @@
 require_relative 'questions_database'
+require_relative 'save'
 
 class User
+  include Save
+
   def self.find_by_id(id)
     results = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
@@ -32,25 +35,6 @@ class User
   def initialize(options = {})
     @id = options['id']
     @fname, @lname = options['fname'], options['lname']
-  end
-
-  def save
-    if id.nil?
-      QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
-        INSERT INTO
-          users (fname, lname)
-        VALUES
-          (?, ?)
-      SQL
-      @id = QuestionsDatabase.instance.last_insert_row_id
-    else
-      QuestionsDatabase.instance.execute(<<-SQL, fname, lname, id)
-      UPDATE users
-      SET fname = ?,
-          lname = ?
-      WHERE id = ?
-      SQL
-    end
   end
 
   def authored_questions

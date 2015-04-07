@@ -1,6 +1,9 @@
 require_relative 'questions_database'
+require_relative 'save'
 
 class Question
+  include Save
+  
   def self.find_by_id(id)
     results = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
