@@ -89,4 +89,6 @@ VALUES
   ((SELECT id FROM questions WHERE title = 'Second!'),
    (SELECT id FROM users WHERE fname = 'John')),
   ((SELECT id FROM questions WHERE title = 'First!'),
-   (SELECT id FROM users WHERE fname = 'Ozzy'));
+   (SELECT id FROM users WHERE fname = 'Ozzy')),
+  ((SELECT id FROM questions WHERE title = 'First!'),
+   (SELECT id FROM users WHERE fname = 'John'));

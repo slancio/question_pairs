@@ -49,6 +49,27 @@ class Reply
     @parent_id = options['parent_id']
   end
 
+  def save
+    if id.nil?
+      QuestionsDatabase.instance.execute(<<-SQL, body, question_id, parent_id, user_id)
+        INSERT INTO
+          replies (body, question_id, parent_id, user_id)
+        VALUES
+          (?, ?, ?, ?)
+      SQL
+      @id = QuestionsDatabase.instance.last_insert_row_id
+    else
+      QuestionsDatabase.instance.execute(<<-SQL, body, question_id, parent_id, user_id, id)
+      UPDATE replies
+      SET body = ?,
+          question_id = ?,
+          parent_id = ?,
+          user_id = ?
+      WHERE id = ?
+      SQL
+    end
+  end
+
   def author
     User::find_by_id(user_id)
   end
