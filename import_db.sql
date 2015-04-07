@@ -61,7 +61,11 @@ VALUES
   ((SELECT id FROM questions WHERE title = 'First!'),
     (SELECT id FROM users WHERE fname = 'Ozzy')),
   ((SELECT id FROM questions WHERE title = 'First!'),
-    (SELECT id FROM users WHERE fname = 'Harry'));
+    (SELECT id FROM users WHERE fname = 'Harry')),
+  ((SELECT id FROM questions WHERE title = 'Second!'),
+    (SELECT id FROM users WHERE fname = 'Ozzy')),
+  ((SELECT id FROM questions WHERE title = 'First!'),
+    (SELECT id FROM users WHERE fname = 'Luke'));
 
 INSERT INTO
   replies (body, question_id, parent_id, user_id)
@@ -69,7 +73,11 @@ VALUES
   ('That is a stupid question!',
     (SELECT id FROM questions WHERE title = 'First!'),
     NULL,
-    (SELECT id FROM users WHERE fname = 'Harry')),
+    (SELECT id FROM users WHERE fname = 'Harry'));
+
+INSERT INTO
+  replies (body, question_id, parent_id, user_id)
+VALUES
   ('Rule 34',
     (SELECT id FROM questions WHERE title = 'First!'),
     (SELECT id FROM replies WHERE body = 'That is a stupid question!'),
